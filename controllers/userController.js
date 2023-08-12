@@ -1,7 +1,7 @@
 const { ObjectId } = require('mongoose').Types;
 const { User, Thought } = require("../models");
 
-const userThoughts = async () =>
+const userThought = async () =>
     User.aggregate()
         .count("userThought")
         .then((userThought) => userThought);
@@ -25,7 +25,7 @@ const thought = async (userId) =>
             .then(async (users) => {
               const userObj = {
                 users,
-                thought: await thought(),
+                userThought: await userThought(),
               };
               return res.json(userObj);
             })
@@ -42,7 +42,7 @@ const thought = async (userId) =>
                 ? res.status(404).json({ message: 'No user with that ID' })
                 : res.json({
                     user,
-                    thought: await reaction(req.params.userId),
+                    thought: await thought(req.params.userId),
                   })
             )
             .catch((err) => {
